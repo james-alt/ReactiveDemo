@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ReactiveUI;
 
 namespace ReactiveDemo.Core
@@ -27,13 +28,7 @@ namespace ReactiveDemo.Core
 			Login.IsExecuting.ToProperty(this, p => p.IsLoading, out isLoading);
 		}
 
-		#region Commands
-
 		public ReactiveCommand Login { get; protected set; }
-
-		#endregion
-
-		#region Properties
 
 		string username;
 		public string Username
@@ -54,7 +49,5 @@ namespace ReactiveDemo.Core
 		{
 			get { return isLoading.Value; }
 		}
-
-		#endregion
 	}
 }

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage 
+<rxui:ReactiveContentPage 
 		xmlns="http://xamarin.com/schemas/2014/forms" 
 		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+		xmlns:rxui="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+		xmlns:vms="clr-namespace:ReactiveDemo.Core;assembly=BCBSLA.Core"
+		x:TypeArguments="vms:LoginViewModel"
 		x:Class="ReactiveDemo.LoginPage">
 	<ContentPage.Content>
 		<ScrollView>
@@ -17,4 +20,4 @@
 			</StackLayout>
 		</ScrollView>
 	</ContentPage.Content>
-</ContentPage>
+</rxui:ReactiveContentPage>

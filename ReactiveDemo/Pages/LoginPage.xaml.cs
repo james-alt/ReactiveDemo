@@ -3,48 +3,34 @@ using ReactiveDemo.Core;
 using Xamarin.Forms;
 using System;
 using System.Reactive.Linq;
+using System.Reactive.Disposables;
+using ReactiveUI.XamForms;
 
 namespace ReactiveDemo
 {
 	public partial class LoginPage 
-		: ContentPage, IViewFor<LoginViewModel>	
+		: ReactiveContentPage<LoginViewModel>
 	{
 		public LoginPage()
 		{
 			InitializeComponent();
 			ViewModel = new LoginViewModel();
+			this.BindingContext = ViewModel;
 
-			this.Bind(ViewModel, vm => vm.Username, v => v.Username.Text);
-			this.Bind(ViewModel, vm => vm.Password, v => v.Password.Text);
-			this.BindCommand(ViewModel, vm => vm.Login, v => v.Login);
+			this.WhenActivated ((disposables) => {
+				this.Bind (ViewModel, vm => vm.Username, v => v.Username.Text).DisposeWith (disposables);
+				this.Bind (ViewModel, vm => vm.Password, v => v.Password.Text).DisposeWith (disposables);
+				this.BindCommand (ViewModel, vm => vm.Login, v => v.Login).DisposeWith (disposables);
 
-			this.WhenAnyValue(x => x.ViewModel.IsLoading)
-				.Subscribe(isBusy =>
-					{
+				this.WhenAnyValue (x => x.ViewModel.IsLoading)
+					.Subscribe (isBusy => {
 						Username.IsEnabled = !isBusy;
 						Password.IsEnabled = !isBusy;
 						LoadingIndicator.IsRunning = isBusy;
-					});
-		}
+					})
+					.DisposeWith (disposables);
+			});
 
-		public static readonly BindableProperty ViewModelProperty =
-			BindableProperty.Create(
-				nameof(ViewModel),
-				typeof(LoginViewModel),
-				typeof(LoginPage),
-				null, 
-				BindingMode.OneWay);
-
-		public LoginViewModel ViewModel
-		{
-			get { return (LoginViewModel)GetValue(ViewModelProperty); }
-			set { SetValue(ViewModelProperty, value); }
-		}
-
-		object IViewFor.ViewModel
-		{
-			get { return ViewModel; }
-			set { ViewModel = (LoginViewModel)value; }
 		}
 	}
 }
